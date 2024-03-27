@@ -1,2 +1,2 @@
-# APZ_Arsenii_Martynov_PZPI_21_8
+# apz-pzpi-21-8-martynov-arsenii
 Програмна система управління кліматом в дитячих садках
