@@ -1,1 +1,454 @@
+1 ДІАГРАМА РОЗГОРТАННЯ
+
+
+Серверна частину була розроблена за технологією ASP.NET.CORE на мові програмування C#.
+Система використовує реляційну базу даних MongoDB для зберігання даних, отриманих від датчиків кімнат, а також інших системних та користувацьких даних. Складові бази даних забезпечують високий рівень надійності та швидкодії доступу до інформації. Також база даних буде з’єднана з ASP.NET.CORE за допомогою JDBC Driver MongoDB.
+Хешування паролів здійснюється за допомогою криптографічних хеш-функцій, такі як SHA-256 або SHA-3.
+ Серверна частина складається з трьох компонентів: User-Interface, Web Server та Sensor. Усі вони пов’язані один з одним через протокол шифрування HTTPS. 
+Сам ASP.NET.CORE використовує Route Handler для маршрутизації де URL-шляхи визначають, які сторінки або контролери повинні обслуговувати запит. Також діаграма має модуль Middlewear для обробки запитів та подальшої передачі даних наступному компоненту.
+Діаграма розгортання наведена у додатку А на рисунку 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2 ДІАГРАМА ПРЕЦЕДЕНТІВ
+
+
+Діаграма прецедентів для розроблена з урахуванням різних ролей, що беруть участь у взаємодії з нею: Користувач, Адміністратор Бізнес-логіки та Адміністратор з Баз Даних. Кожна роль виконує свої унікальні дії, спрямовані на оптимальне використання системних можливостей. Користувачі можуть зареєструватися та авторизуватися, переглядати і додавати садочки, фільтрувати їх за категоріями, отримувати рекомендації та налаштовувати повідомлення. Адміністратор бізнес-логіки відповідає за управління користувачами та системою, налаштовування прав та обмежень, видалення та блокування записів. Адміністратор баз даних адмініструє бази даних, здійснює резервне копіювання, додає нові бази та забезпечує їх безпеку. Знизу наведена сама діаграма прецедентів
+ 
+Рисунок 1 – Діаграма прецедентів до програмної системи ChildClimaCare
+3 ER МОДЕЛЬ ДАНИХ
+
+
+Для розробки програмного продукту була використана база даних MongoDB. Під час реалізації бази даних були створені наступні таблиці: 
+-	User(Таблиця з даними користувача). Вона має такі поля: user_id, username, first_name, last_name, email, password, phone, role, status . Ця таблиця з’єднана з таблицею Gardens.
+-	Gardens (Таблиця з садками та їх даними). Вона має такі поля: name, location, director, email, phone, users. Ця таблиця з’єднана з таблицею Users зв’язком один до багатьох та з таблицею Rooms зв’язком один до багатьох
+-	Rooms(Таблиця з даними про кімнати). Вона має такі поля: room_number, capacity, garden_id. Ця таблиця з’єднаная зв’язком один до багатьох та з таблицею Equipment
+-	Equipment(Таблиця з даними про сенсори). Вона має такі поля: device_id, room_id, name, status. Ця таблиця з’єднана з таблице Measurement зв’язком один до багатьох.
+-	Measurement(Таблиця з обробленими даними). Вона має такі поля: measurement_id, device_id, measurement_type, measurement_value, measurement_time timestamp.
+Кожен Садочок може мати одного або багато користувачів. Кожен садочок може мати одну або багато кімнат. Кожна кімната може мати одне або багато пристроїв зчитування даних. Кожен пристрій может мати багато записів даних.
+		ER-модель даних наведена у додатку Б на рисунку .
+
+
+
+
+
+
+
+
+
+
+4 ДІАГРАМА ДІЯЛЬНОСТІ
+
+
+ 	На діаграмі діяльності відображено основні кроки, які Користувач виконує під час взаємодії з системою управління кліматом в дитячих садках. Починаючи з переходу на сторінку авторизації, весь процес проймається логічні кроки, що визначаються потребами та функціональністю системи.
+		Користувач починає з переходу на сторінку авторизації, де він вводить свій логін та пароль. Якщо логіна або пароль був невірним, то користувач знову повертається на сторінку авторизації.
+Після введення інформації розпочинається процес збору даних, який включає перевірку введених облікових даних та визначення доступу до системи.
+Після успішної авторизації Користувач має можливість переглядати кліматичні дані садочку. Цей етап включає в себе взаємодію з базою даних та відображення корисної інформації щодо клімату в садочку, їх параметрів та додаткових рекомендацій.
+		У кінці сесії в системі, Користувач має опцію вийти з свого облікового запису. Це завершує активну сесію та забезпечує безпеку облікових даних.
+		Діаграма діяльності на ведена у додатку В на рисунку . 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5 REST СПЕЦИФІКАЦІЯ
+
+
+В процессі створені серверної частину була дотримана REST специфікація. REST специфікація визначає, як клієнти і сервери мають взаємодіяти в системі, використовуючи принципи архітектури REST. REST специфікаія наведена у таблиці 1.
+
+Таблиця 1 – REST специфікація
+Назва	Метод	Шлях	Тіло
+Get a list of gardens	GET	api/Gardens	
+Get gardens users by ID	GET	api/Users/Gardens/{gardens_id}	
+Create a new gardens	POST	api/Gardens/addGardens	{
+  "Name": "string",
+  "Location": " string ",
+  "Director": " string ",
+  "Email": " string ",
+  "Phone": "string ",
+  "Users": [
+    {
+      "_id": {
+        "$oid": " string "
+      }
+    }
+  ]
+}
+Update gardens by ID	PUT	api/Gardens/{gardens_id}	{
+  "Name": "string",
+  "Location": " string ",
+  "Director": " string ",
+  "Email": " string ",
+  "Phone": "string ",
+  "Users": [
+    {
+      "_id": {
+        "$oid": " string "
+      }
+    }
+  ]
+}
+Delete gardens by ID	DELETE	api/Gardens/{gardens_id}	
+Get a list of rooms 	GET	api/Rooms	
+Create a new room	POST	api/ Rooms/addRooms	{
+  "RoomNumber": "string",
+  "Capacity": " string ",
+  "GardenId": " string "
+}
+Update room	PUT	api/Rooms/{rooms_id}	{
+  "RoomNumber": "string",
+  "Capacity": " string ",
+  "GardenId": " string "
+}
+Delete room	DELETE	api/Rooms/{rooms_id}	
+Get device	GET	api/Device	
+Create a new device	POST	api/Device/addDevice	{
+  "RoomId": "string",
+  "Name": " string ",
+  "Status": " string "
+}
+Update device	PUT	api/Device/{device_id}	{
+  "RoomId": "string",
+  "Name": " string ",
+  "Status": " string "
+}
+Delete device	DELETE	api/ Device/{device_id}	
+Get logs by device ID	GET	api/Device/{device_id}/log	
+Get log by rooms ID	GET	api/ Rooms/{rooms_id}/log	
+Update log by record ID	PUT	api/log/{log_id}	{"DeviceIsd": "string",
+"MeasurementType": "string",
+"Value": "string"
+}
+Delete log by record ID	DELETE	api/log/{log_id}	
+Get user data	GET	api/user/{user_id}	
+Get a list of users	GET	api/admin/Users	
+Register	POST	api/register	{"Username": "string",
+  "FirstName": " string ",
+  "LastName": " string ",
+  "Email": "anna@example.com",
+  "Password": " string ",
+  "Phone": "+ string ",
+  "Role": " string ",
+  "Status": " string " }
+Login	POST	api/login	{ "Username": "string",
+"Password": " string "
+}
+Logout	POST	api/ logout	
+Delete user	DELETE	api/ admin/user_id	
+Update User	PUT	api/ admin/user_id	{"Username": "string",
+  "FirstName": " string ",
+  "LastName": " string ",
+  "Email": "anna@example.com",
+  "Password": " string ",
+  "Phone": "+ string ",
+  "Role": " string ",
+  "Status": " string " }
+
+
+
+
+
+
+
+
+
+
+
+
+
+6 АРХІТЕКТУРА СЕРВЕРНОЇ ЧАСТИНИ
+
+
+Структура серверної частини наведена в додатку Г. Для архітектури проекту було створено пакети “entity” та , які відповідають за створення таблиць у базі, ”services”, який зберігає у собі класи-сервіси, ”security” та ”config”, які зберігають у собі класи відповідаючи за безпеку користувачів, “controller” який зберігає у собі контролери системи, “payload” який зберігає у собі класи відповідаючи за створення вибірок необхідних даних для різних сценаріїв. Приклади класів які відповідають за різний функціонал наведено у додатку Д.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ВИСНОВОК
+
+
+		Під час виконання цієї лабораторної роботи була розроблена серверна частина до проєкту “Програмна система управління кліматом в дитячих садках” на мові C# за допомогою фреймворку ASP.NET.CORE у середовищі Visual Studio та використанням бази даних MongoDB. 
+Посилання на демо-відео:
+https://youtu.be/IF34qPX3_0w
+
+
+
+
+
+
+
+
+
+
+
+ 
+ДОДАТОК А
+ 
+Рисунок 2 – Діаграма розгортання до програмної системи ChildClimaCare 
+ДОДАТОК Б
+ 
+Рисунок 3 – ER модель даних до програмної системи  ChildClimaCare
+
+ 
+ДОДАТОК В
+ 
+
+
+Рисунок 4 – Діаграма діяльності до програмної системи ChildClimaCare
+ 
+ДОДАТОК Г
+ 
+
+Рисунок 5 – Структура програмної системи “ ChildClimaCare”
+
+
+ДОДАТОК Д
+
+Фрагмент BackupController.cs
+
+
+1 [Route("api/[controller]")]
+2 [ApiController]
+3 public class BackupController : ControllerBase
+4 {
+5    private readonly IMongoClient _mongoClient;
+6    private readonly string _backupDirectory = "D:\\Жители\\Арсений\\Универ\\3 курс\\АПЗ\\WebApplication2\\WebApplication2\\Backup";
+7   public BackupController(IMongoClient mongoClient)
+8   {
+9        _mongoClient = mongoClient;
+10  }
+11  [HttpPost("CreateBackup")]
+12  public async Task<IActionResult> CreateBackup()
+13  {
+14      var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+15      var backupFolder = Path.Combine(_backupDirectory,  $"Backup_{timestamp}");
+16      if (!Directory.Exists(backupFolder))
+17      {
+18            Directory.CreateDirectory(backupFolder);
+19      }
+20      try
+21      {
+22            // Creating a dump only for the ChildClimaCare database
+23            var db = _mongoClient.GetDatabase("ChildClimaCare");
+24            var collections = await db.ListCollectionNamesAsync();
+25            await collections.ForEachAsync(async collectionName =>
+26            {
+27                var collection =        db.GetCollection<BsonDocument>(collectionName);
+28                var documents = await collection.Find(new      BsonDocument()).ToListAsync();
+29                var backupFilePath = Path.Combine(backupFolder, $"ChildClimaCare_{collectionName}.json");
+
+ 30              // Saving documents to a JSON file
+ 31               await System.IO.File.WriteAllTextAsync(backupFilePath, documents.ToJson(new JsonWriterSettings { Indent = true }));
+ 32           });
+ 33          return Ok($"Резервне копіювання бази даних ChildClimaCare     створено в {backupFolder}");
+ 34     }
+ 35     catch (Exception ex)
+ 36     {
+ 37 // Returning a message with the error description in case of failure 
+                   38      return StatusCode(500, $"Помилка при створенні резервної копії: {ex.Message}");
+ 39       }
+ 40   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Фрагмент SecurityConfig.cs
+
+1	public class SecurityConfig
+2	{
+3	private readonly IConfiguration _configuration;
+4	// Constructor to inject IConfiguration.
+5	public Startup(IConfiguration configuration)
+6	{
+7	       _configuration = configuration;
+8	}
+9	// ConfigureServices method is called to configure the services used in the application.
+10	public void ConfigureServices(IServiceCollection services)
+11	{
+
+12	services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+13	.AddJwtBearer(options =>
+14	{
+15	options.TokenValidationParameters = new TokenValidationParameters
+16	{
+17	ValidateIssuer = true,
+18	ValidateAudience = true,
+19	ValidateLifetime = true,
+20	ValidateIssuerSigningKey = true,
+21	ValidIssuer = _configuration["Jwt:Issuer"],
+22	ValidAudience = _configuration["Jwt:Audience"],
+23	IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]))
+24	};
+25	});
+
+26	services.AddAuthorization();
+
+27	services.AddControllers();
+28	}
+29	// Configure method is called to set up the HTTP request pipeline.
+30	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+31	{
+32	if (env.IsDevelopment())
+33	{
+34	app.UseDeveloperExceptionPage();
+35	}
+
+36	app.UseAuthentication();
+37	app.UseAuthorization();
+
+38	app.UseRouting();
+
+39	app.UseEndpoints(endpoints =>
+40	{
+41	endpoints.MapControllers();
+42	});
+43	}
+44	}
+
+Фрагмент AdminController.cs
+
+1	[ApiController]
+2	[Route("api/admin")]
+3	public class AdminController : ControllerBase
+4	{
+5	private readonly IMongoCollection<AdminUser> _usersCollection;
+6	// Constructor to inject the MongoDB database instance.
+7	public AdminController(IMongoDatabase database)
+8	{
+9	_ usersCollection = database.GetCollection<AdminUser>("User ");
+10	}
+11	// GetUser endpoint retrieves a user by its ID.
+12	public async Task<IActionResult> GetAllUsers(string id)
+13	{
+14	var filter = Builders<AdminUser>.Filter.Eq("_id", new ObjectId(id));
+15	var users = await usersCollection.Find(filter).FirstOrDefaultAsync();
+
+16	if (users == null)
+17	{
+18	return NotFound("Users not found");
+19	}
+
+20	return Ok(users);
+21	}
+22	// DeleteUser endpoint deletes a users by its ID.
+23	public async Task<IActionResult> DeleteUsers (string id)
+24	{
+25	try
+26	{
+27	var objectId = new ObjectId(Id);
+
+28	var deleteResult = await _ usersCollection.DeleteOneAsync(Builders<AdminUser>.Filter.Eq("_id", objectId));
+
+29	if (deleteResult.DeletedCount == 0)
+30	{
+31	return NotFound("User not found");
+32	}
+
+33	return Ok("User deleted successfully");
+34	}
+35	catch (Exception ex)
+36	{
+37	return StatusCode(500, $"Internal Server Error: {ex.Message}");
+38	}
+39	}
+
+
+
+
+
+Фрагмент ChildClimaCareApplication.cs
+1.	var builder = WebApplication.CreateBuilder(args);
+
+2.	var configuration = new ConfigurationBuilder()
+3.	.SetBasePath(Directory.GetCurrentDirectory())
+4.	.AddJsonFile("appsettings.json")
+5.	.Build();
+
+6.	builder.Services.AddSingleton<IMongoClient>(provider =>
+7.	{
+8.	var connectionString = configuration.GetConnectionString("MongoDB");
+9.	return new MongoClient(connectionString);
+10.	});
+
+11.	builder.Services.AddScoped(provider =>
+12.	{
+13.	var client = provider.GetRequiredService<IMongoClient>();
+14.	var databaseName = configuration.GetValue<string>("DatabaseSettings:DatabaseName");
+15.	return client.GetDatabase(databaseName);
+16.	});
+
+17.	builder.Services.AddControllers();
+
+18.	var app = builder.Build();
+19.	app.MapControllers();
+
+20.	app.Run();
+
 
