@@ -1,1 +1,172 @@
+1 БУДОВА ПРИСТРОЮ
+
+
+Схема пристрою складається з мікроконтролера ESP32 та трьох датчиків: DHT22, Analog temperature sensor та Photosensor. DHT22 використовується для виміру вологості. Analog temperature sensor використовується для виміру температури. Photosensor використовується для виміру освітленості. Кожен з цих датчиків передає дані на ESP32, який, у свою чергу, кожні 10 секунд надсилає ці дані на сервер за допомогою HTTP-запиту. Після кожного успішного запиту, пристрій отримує статус про запис даних, який відображається в консолі ESP32. Після обробки сервером, ці дані записуються до бази даних. Код IoT пристрію наведений у додатку Г. 
+Рисунок 1 – Будова IoT пристрою
+
+2 ДІАГРАМА ПРЕЦЕДЕНТІВ
+
+
+Діаграма прецедентів для IoT-системи розроблена з урахуванням ключових ролей, які взаємодіють з системою. Основні ролі включають Користувача, який може виконувати дії, такі як включення та вимкнення пристрою, відправлення даних на сервер, додаваня нових пристроїв, а також перегляд та зчитування даних пристрою. Ці дії дозволяють користувачу ефективно взаємодіяти з IoT-пристроями, отримувати актуальну інформацію про стан пристроїв та управляти ними. Знизу наведена сама діаграма прецедентів
+
+ 
+Рисунок 2 – Діаграма прецедентів до IoT пристрою програмної системи ChildClimaCare
+
+3 ДІАГРАМА ВЗАЄМОДІЇ
+
+
+Діаграма взаємодії розроблена для пристрою управлінням кліматом в дитячих садка включає три основні компоненти: під’єднанная до Wi-Fi, відправки даних на сервер та отримання статусу даних та відображення їх.
+Для початку користувачу потрібно під’єднати свій пристрій до Wi-Fi, , якщо підключення не вдається, то процесс повторюється, якщо під’єднання було успішне, то починається відправка даних на сервер. Якщо сервер не успішно обробив дані, то йде повторення циклу, поки користувач не отримає дані, якщо обробка була успішна, то після цього дані буду відображені. Після цього користувач або зупиняє процесс, або знову відправляє запрос на отримання даних.
+Діаграма станів наведена у додатку А на рисунку 3.
+
+4 ДІАГРАМА CТАНІВ
+
+
+Діаграма станів для IoT пристрію відображає процес роботи IoT пристрію. Процес починається з активації пристрою. Після цього йде вимірювання показників вологості та температиури. Якщо вимірювання були успішними, то відображається інформація про їх успішність. Далі йде повторення вимірювання. Після цього йде відображення самих даних та вимкнення пристрою. Якщо була помилка вимірювання, то процес повторюється.
+Діаграма станів наведена у додатку Б на рисунку 4.
+
+5 ДІАГРАМА ДІЯЛЬНОСТІ
+
+
+Діаграма діяльності представляє собою послідовність кроків, які IoT-пристрій виконує для зв’язку з сервером. Починаючи з увімкнення пристрою, він спочатку підключається до Wi-Fi. У разі успішного підключення, пристрій переходить до передачі даних на сервер. Якщо передача даних не вдається, пристрій повторює спробу підключення до Wi-Fi. Після успішної передачі даних, починається запис даних до бази даних, після цього йде визначення статусу та запис статусу IoT пристрію та даних. Після цього вже йде повернення статусу та відображення для IoT пристрію. Після відображення статусу йде вимикання пристрію. 
+Діаграма діяльності наведена у додатку В на рисунку 5.
+
+ВИСНОВОК
+
+
+Під час виконання даної лабораторної роботи було розроблено програмне забезпечення для IoT пристрою на базі ESP32 на мові програмування C++ для програмної системи управління кліматом в дитячих садках. 
+Посилання на демо-відео:
+https://youtu.be/objSqTqFE58
+
+ДОДАТОК А
+ 
+Рисунок 3 – Діаграма взаємодії користувача з IoT пристроєм
+
+ДОДАТОК Б
+ 
+Рисунок 4 – Діаграма станів до IoT пристрою
+
+ДОДАТОК В
+ 
+Рисунок 5 – Діаграма діяльності IoT пристрію
+
+ДОДАТОК Г
+
+Фрагмент sketch.ino
+1  #include <WiFi.h>
+2  #include <HTTPClient.h>
+3  #include <ArduinoJson.h>
+4  #include <DHT.h>
+5  #include "DHTesp.h"
+6  // Defining pins for sensors
+7  const int PHOTOSENSOR_PIN = 35; 
+8  const int NTC_PIN = 34;         
+9  const int DHT_PIN = 15;
+10 const char* ssid = "Wokwi-GUEST"; 
+11 const char* password = "";
+12 DHT dht(DHT_PIN, DHT22);
+13 // Constants for the Steinhart-Hart equation
+14 const float BETA = 3950;
+15 // Constants for measuring illumination
+16 const float GAMMA = 0.7;
+17 const float RL10 = 50;
+18 const float Ro = 10000; 
+19 const float A = 0.001129148; 
+20 const float B = 0.000234125; 
+21 const float C = 0.0000000876741;
+22 void setup() {
+23   Serial.begin(9600); 
+24   // Setting ADC resolution
+25   analogReadResolution(10); 
+26   pinMode(NTC_PIN, INPUT); 
+27   pinMode(PHOTOSENSOR_PIN, INPUT);
+28   dht.begin();
+29   WiFi.begin(ssid, password); 
+30   // Waiting until we connect to Wi-Fi
+31   while (WiFi.status() != WL_CONNECTED) {
+32     delay(500);
+33     Serial.print(".");
+34   }
+35   Serial.println("Connected to WiFi");
+36 }
+37 void loop() {
+38  // Measuring and sending light intensity
+39  sendLightIntensity();
+40  // Measuring and sending temperature
+41  sendTemperature();
+42  // Measuring and sending humidity
+43  sendHumidity();
+44  delay(10000); 
+45 }
+46 void sendLightIntensity() {
+47  int lightValue = analogRead(PHOTOSENSOR_PIN);
+48  // Converting to luminance 
+49  float voltage = lightValue / 1024. * 5; 
+50  float resistance = 2000 * voltage / (1 - voltage / 5);
+51  float lux = pow(RL10 * 1e3 * pow(10, GAMMA) / resistance, (1 / GAMMA));
+52  if (isnan(lux)) {
+53    lux = 0;
+54  }
+55  Serial.print("Lux: ");
+56  Serial.println(lux);
+57  sendSensorData("LightIntensity", lux);
+58  }
+59 void sendTemperature() {
+60  int adcValue = analogRead(NTC_PIN);
+61  Serial.print("ADC Value: ");
+62  Serial.println(adcValue);
+63  if (adcValue <= 1) {
+64    Serial.println("NTC read error");
+65    return;
+66  }
+67  // Calculate the voltage across the thermistor 
+68  float Vout = (adcValue * 3.3) / 1023.0; 
+69  // Calculate the resistance of the thermistor 
+70  float Rt = (Vout * Ro) / (3.3 - Vout); 
+71  // Steinhart-Hart Equation to calculate temperature in Kelvin 
+72  float TempK = 1 / (A + (B * log(Rt)) + C * pow(log(Rt), 3)); 
+73  // Convert Kelvin to Celsius 
+74  float TempC = TempK - 273.15; 
+75  if (isnan(TempC)) {
+76    Serial.println("Failed to read from NTC sensor!");
+77    return;
+78  }
+79  Serial.print("Temperature: ");
+80  Serial.print(TempC);
+81  Serial.println(" ℃");
+82  sendSensorData("Temperature", celsius);
+83 }
+84 void sendHumidity() {
+85  float humidity = dht.readHumidity();
+86  if (isnan(humidity)) {
+87    Serial.println("Failed to read from DHT sensor!");
+88    return;
+89  }
+90  sendSensorData("Humidity", humidity);
+91 }
+92 void sendSensorData(const char* type, float value) {
+93  if (WiFi.status() == WL_CONNECTED) {
+94    HTTPClient http;
+95    http.begin("http://6bf2-46-211-225-65.ngrok-free.app/api/Measurements");
+96    http.addHeader("Content-Type", "application/json");
+97    StaticJsonDocument<200> jsonDoc;
+98    jsonDoc["DeviceId"] = "ESP32_Device";
+99    jsonDoc["MeasurementType"] = type;
+100   jsonDoc["Value"] = String(value); // Конвертація числа в рядок
+101   String requestBody;
+102   serializeJson(jsonDoc, requestBody);
+103   int httpResponseCode = http.POST(requestBody);
+104   if (httpResponseCode > 0) {
+105     String response = http.getString();
+106     Serial.println(httpResponseCode);
+107     Serial.println(response);
+108   } else {
+109     Serial.print("Error on sending POST: ");
+110     Serial.println(httpResponseCode);
+111   }
+112   http.end();
+113  } else {
+114   Serial.println("Error in WiFi connection");
+115  }
+116 }
 
