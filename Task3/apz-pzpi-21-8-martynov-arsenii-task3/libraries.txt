@@ -1,0 +1,10 @@
+# Wokwi Library List
+# See https://docs.wokwi.com/guides/libraries
+
+
+ArduinoJson
+HttpClient
+DHT sensor library for ESPx
+WiFiWire
+DHT sensor library
+NTC_Thermistor
