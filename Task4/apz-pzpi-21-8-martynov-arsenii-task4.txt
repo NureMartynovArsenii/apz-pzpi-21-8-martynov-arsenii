@@ -1,1 +1,238 @@
+1 ДІАГРАМА КОМПОНЕНТІВ
+
+
+Діаграма компонентів розроблена для системи управлінням кліматом в дитячих садках, яка складається з двох основних частин: серверної та клієнтської.
+Серверна частина системи відповідає за забезпечення API та взаємодію між контролерами. Контролери, в свою чергу, взаємодіють з базою даних для зберігання та отримання необхідної інформації. Процес розпочинається з прийому запиту від App.js. Сервер обробляє цей запит та повертає результат на клієнтську частину.
+Клієнтська частина системи включає компоненти, які відповідають за відображення та взаємодію з користувачем. Компоненти, такі як User.jsx, Gardens.jsx,.jsx, Measurements.jsx, Register.jsx, Auth.jsx, Admin.jsx, складають інтерфейс користувача. Кожен з цих компонентів взаємодіє з серверною частиною, використовуючи API, для отримання та відправлення необхідної інформації.
+		Діаграма компонентів зображена у додатку А на рисунку 1.
+
+2 ДІАГРАМА ПРЕЦЕДЕНТІВ
+
+
+Діаграма прецедентів для розроблена з урахуванням різних ролей, що беруть участь у взаємодії з нею: Користувач, Адміністратор Бізнес-логіки та Адміністратор з Баз Даних. Кожна роль виконує свої унікальні дії, спрямовані на оптимальне використання системних можливостей. Користувачі можуть зареєструватися та авторизуватися, переглядати садки, кімнати, обладнання, дані з пристроїв. Адміністратор бізнес-логіки відповідає за управління користувачами та системою, налаштовування прав та обмежень, видалення та блокування записів. Адміністратор баз даних адмініструє бази даних, здійснює резервне копіювання, додає нові бази. 
+Діаграма прецедентів наведена у додатку Б на рисунку 2 .
+
+3 ДІАГРАМА ВЗАЄМОДІЇ
+
+
+Діаграма взаємодії розроблена для модулю управлінням кліматом в дитячих садках і включає п'ять основних компонентів: login, ChildClimaCare, filter, update, та add.
+		Login компонент, що відповідає за авторизацію користувача. Взаємодіє з client api для отримання введених користувачем даних, відправляє HTTP-запит на сервер і очікує відповідь.
+		ChildClimaCare відповідає за управлінням кліматом. Взаємодіє з client api для отримання та відправки даних на сервер, а також обробки і відображення результатів.
+		Filter компонент, що забезпечує фільтрацію даних. Взаємодіє з client api для взяття фільтраційних параметрів від користувача, відправляє їх на сервер і обробляє отримані результати.
+		Update відповідає за оновлення даних. Взаємодіє з client api для відправлення запиту на оновлення на сервер, а також обробки відповіді та оновлення відображених даних.
+		Add Компонент для додавання нових даних. Взаємодіє з client api для відправлення нових даних на сервер та обробки результатів додавання.
+		Взаємодія між компонентами та їх відносини відбуваються через client api та server. Кожен компонент генерує HTTP-запити до сервера відповідно до своїх функцій, сервер обробляє ці запити та надсилає відповіді.
+		Діаграма взаємодії наведена у додатку В на рисунку 3.
+
+4 ДІАГРАМА СТАНІВ
+
+
+Діаграма станів для користувача системи управлінням кліматом в дитячих садках розглядає можливі шляхи взаємодії користувача з системою. Користувач спочатку знаходиться на головній сторінці, звідки він може перейти на сторінку реєстрації або авторизації. Після успішної реєстрації користувачу потрібно авторизуватися у системі. Після успішної авторизації користувач перейде на сторінку с садками, де він може подивитися інформацію про усіх садків.
+Далі користувач може подивитися на сторінку з кімнатами, де він зможе побачити усі кімнати конкретного садка.
+Після користувач може перейти на сторінку обладнання, де він зможе побачити усі пристрої які знаходяться у кімнаті.
+На наступній сторінці користувач може побачити усі записи пристроїв
+На сторінці профілю користувач може відредагувати інформацію про акаунт. 
+		Якщо це адміністратор, то він переходить на сторінку адміністрування, де зможе побачити усю інформацію системи. Спочатку адміністратор побачить список усіх садків, які він зможе редагувати, видаляти та оновлювати. Далі він зможе побачити списки усіх користувачів, які також зможе редагувати, видаляти та оновлювати. Після цього він побачить список усіх кімнат, які також зможе редагувати, видаляти та оновлювати. Після цього він побачить список усього обладнання та логів, які також зможе редагувати, видаляти та оновлювати.
+		Діаграма станів наведена у додатку Г на рисунку 4.
+
+5 СТРУКТУРА КЛІЄНТСЬКОЇ ЧАСТИНИ
+
+
+Для проекту було використано стандартну структуру React проекту. Згідно з рисунком можна побачити що проект поділено на декілька папок, починаючи з src проект розподіллено на App.js та папку компоненти, яка включає до себе сторінки сайту, папку локалізації з файлом локалізації та папку фрагменти, яка включає у себе фрагменти використані на сторінках.
+
+ВИСНОВОК 
+
+
+Під час виконання цієї лабораторної роботи була розроблена клієнтська частина до проєкту “Програмна система управлінням кліматом в дитячих садках” на мові JavaScript за допомогою фреймворку React у середовищі Visual Studio та використанням бази даних MongoDB.
+		Посилання на демо-відео:
+
+https://youtu.be/Y_WEQrF_Cu4
+
+ДОДАТОК А
+
+ 
+Рисунок 1 – Діаграма компонентів до програмної системи ChildClimaCare 
+
+ДОДАТОК Б
+
+ 
+Рисунок 2 – Діаграма прецедентів до програмної системи ChildClimaCare
+ 
+ДОДАТОК В
+
+ 
+Рисунок 3 – Діаграма взаємодії до програмної системи ChildClimaCare
+
+ДОДАТОК Г
+ 
+
+Рисунок 4 – Діаграма станів до  програмної системи ChildClimaCare 
+
+ДОДАТОК Д
+
+Фрагмент коду App.js
+
+1 const PrivateRoute = ({ children }) => {
+2    const token = localStorage.getItem('token');
+3    return token ? children : <Navigate to="/admin/login" />;
+4 };
+5 function App() {
+6    return (
+7        <Router>
+8           <Menu />
+9           <Routes>
+10                <Route path="/" element={<FullScreenImage />} />
+11                <Route path="/registration" element={<Registration />} />
+12                <Route path="/authorization" element={<Authorization />} />
+13                <Route path="/admin/login" element={<Authorization />} />
+14                <Route path="/adminpage" element={
+15                    <PrivateRoute>
+16                        <AdminPage />
+17                    </PrivateRoute>
+18                } />
+19                <Route path="/gardens" element={<Gardens />} />
+20                <Route path="/gardens/:gardenId/rooms" element={<Rooms />}       />
+21                <Route path="/rooms/:roomId/equipment" element={<Equipment />} />
+22                <Route path="/equipment/:equipmentId/measurements" 
+23 element={<Measurements />} />
+24            </Routes>
+25        </Router>
+26    );
+27 }
+28 export default App;
+
+Фрагмент коду Authorization.js
+
+1 const Authorization = () => {
+2    const { t } = useTranslation();
+3    const [formData, setFormData] = useState({ username: '', password:  '' });
+4    const [isAdmin, setIsAdmin] = useState(false);
+5    const [message, setMessage] = useState('');
+6    const navigate = useNavigate();
+7    const handleChange = (e) => {
+8        const { name, value } = e.target;
+9        setFormData({ ...formData, [name]: value });
+10   };
+11   const handleSubmit = async (e) => {
+12        e.preventDefault();
+13        const url = isAdmin ? 'https://localhost:7077/api/admin/login' : 'https://localhost:7077/api/users/login';
+14        try {
+15            const response = await fetch(url, {
+16                method: 'POST',
+17                headers: {
+18                    'Content-Type': 'application/json',
+19                },
+20                body: JSON.stringify(formData),
+21            });
+22            if (response.ok) {
+23                const data = await response.json();
+24                if (isAdmin) {
+25                    if (data.role === 'admin') {
+26                        localStorage.setItem('token', data.token);
+27                        setMessage(t('SuccessfulAuthorization'));
+28                        navigate('/adminpage');
+29                    } else {
+30                        setMessage(t('AdminRightsRequired'));
+31                    }
+32                } else {
+33                    setMessage(t('SuccessfulAuthorization'));
+34                    navigate('/gardens');
+35                }
+36            } else {
+37                setMessage(t('InvalidLoginOrPassword'));
+38            }
+39        } catch (error) {
+40            setMessage(t('AuthorizationError'));
+41        }
+42    };
+
+Фрагмент коду AdminGardens.js
+
+1 const AdminGardens = () => {
+2    const [gardens, setGardens] = useState([]);
+3    const [users, setUsers] = useState([]);
+4    const [gardenForm, setGardenForm] = useState({
+5        name: '',
+6        location: '',
+7        director: '',
+8        email: '',
+9        phone: '',
+10       users: []
+11   });
+12    const [isEditing, setIsEditing] = useState(false);
+13    const [currentGardenId, setCurrentGardenId] = useState(null);
+14    useEffect(() => {
+15        fetchGardens();
+16        fetchUsers();
+17    }, []);
+18    const fetchGardens = async () => {
+19        try {
+20            const token = localStorage.getItem('token');
+21            const response = await fetch('https://localhost:7077/api/admin/gardens', {
+22                headers: {
+23                    'Authorization': `Bearer ${token}`
+24                }
+25            });
+26            const data = await response.json();
+27            setGardens(data);
+28        } catch (error) {
+29            console.error('Ошибка при получении садиков:', error);
+30        }
+31    };
+32    const fetchUsers = async () => {
+33        try {
+34            const token = localStorage.getItem('token');
+35            const response = await fetch('https://localhost:7077/api/admin/users', {
+36                headers: {
+37                    'Authorization': `Bearer ${token}`
+38                }
+39            });
+40            const data = await response.json();
+41            setUsers(data);
+42        } catch (error) {
+43            console.error('Ошибка при получении пользователей:', error);
+44        }
+45    };
+46
+47    const handleInputChange = (e) => {
+48        const { name, value } = e.target;
+49        if (name === 'users') {
+50            const selectedUsers = Array.from(e.target.selectedOptions, option => option.value);
+51            setGardenForm({ ...gardenForm, users: selectedUsers.map(id => ({ id })) });
+52        } else {
+53            setGardenForm({ ...gardenForm, [name]: value });
+54        }
+55    };
+56    const handleCreateGarden = async () => {
+57        try {
+58            const token = localStorage.getItem('token');
+59            const response = await fetch('https://localhost:7077/api/admin/gardens', {
+60                method: 'POST',
+61                headers: {
+62                    'Content-Type': 'application/json',
+63                    'Authorization': `Bearer ${token}`
+64                },
+65                body: JSON.stringify(gardenForm),
+66            });
+67            if (response.ok) {
+68                fetchGardens();
+69                setGardenForm({ name: '', location: '', director: '', email: '', phone: '', users: [] });
+70            }
+71        } catch (error) {
+72            console.error('Ошибка при создании садика:', error);
+73        }
+74    };
+75    const handleEditGarden = (garden) => {
+76        setIsEditing(true);
+77        setCurrentGardenId(garden.id);
+78        setGardenForm({
+79            name: garden.name,
+80            location: garden.location,
+81            director: garden.director,
+82            email: garden.email,
+83            phone: garden.phone,
+84            users: garden.users.map(user => ({ id: user.id }))
+85        });
+86    };
+
 
