@@ -2,46 +2,6 @@
 import { Link } from 'react-router-dom';
 import './Menu.css';
 import accountIcon from './account-icon.png';
-
-//const Menu = () => {
-//    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-//    const toggleMenu = () => {
-//        setIsMenuOpen(!isMenuOpen);
-//    };
-
-//    const closeMenu = () => {
-//        setIsMenuOpen(false);
-//    };
-
-//    return (
-//        <div className="menu-container">
-//            <div className="menu-left">
-//                <button className="menu-button">Українська</button>
-//                <button className="menu-button">Англійська</button>
-//            </div>
-//            <div className="menu-center">
-//                ChildClimaCare
-//            </div>
-//            <div className="menu-right">
-//                <img src={accountIcon} className="account-icon" alt="Account Icon" onClick={toggleMenu} />
-//                {isMenuOpen && (
-//                    <div className="dropdown-menu">
-//                        <Link to="/registration" onClick={closeMenu}>Registration</Link>
-//                        <Link to="/authorization" onClick={closeMenu}>Authorization</Link>
-//                        <Link to="/" className="dropdown-item">Main</Link>
-//                        <button onClick={closeMenu}>Close</button>
-//                    </div>
-//                )}
-//            </div>
-//        </div>
-//    );
-//};
-
-//export default Menu;
-
-
-
 import { useTranslation } from 'react-i18next';
 
 const Menu = () => {
