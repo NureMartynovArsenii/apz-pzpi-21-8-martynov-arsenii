@@ -10,7 +10,6 @@ import Rooms from './Rooms';
 import Equipment from './Equipment'; 
 import Measurements from './Measurements';
 import './i18n'
-/*import { BrowserRouter as *//*Router*//* *//*Route*//* Routes, Navigate } from 'react-router-dom';*/
 import './App.css';
 
 
