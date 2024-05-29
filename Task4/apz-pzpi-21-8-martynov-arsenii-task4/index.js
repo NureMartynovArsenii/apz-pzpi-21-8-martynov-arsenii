@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client'; // Импортируйте из 'react-dom/client'
+import ReactDOM from 'react-dom/client'; // Г€Г¬ГЇГ®Г°ГІГЁГ°ГіГ©ГІГҐ ГЁГ§ 'react-dom/client'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './i18n'; // Добавьте эту строку для инициализации i18next
+import './i18n';
 
-// Создайте корневой элемент для рендеринга
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
@@ -13,7 +13,7 @@ root.render(
     </React.StrictMode>
 );
 
-// Опционально, если у вас есть отчет о веб-виталиях
+
 reportWebVitals();
 
 
