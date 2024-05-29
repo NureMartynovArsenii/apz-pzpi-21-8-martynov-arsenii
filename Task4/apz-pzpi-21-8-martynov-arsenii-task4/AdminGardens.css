@@ -1,0 +1,26 @@
+﻿.admin-gardens-container {
+    padding: 20px;
+}
+
+.garden-form {
+    margin-bottom: 20px;
+}
+
+    .garden-form input {
+        margin-right: 10px;
+    }
+
+.gardens-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .gardens-table th, .gardens-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .gardens-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
