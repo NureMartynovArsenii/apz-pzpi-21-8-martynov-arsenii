@@ -2,103 +2,134 @@
 import './AdminMeasurements.css';
 
 const AdminMeasurements = () => {
-    const [measurements, setMeasurements] = useState([]);
+    const [measurements, setMeasurements] = useState([]); // State to store measurements
     const [measurementForm, setMeasurementForm] = useState({
         deviceId: '',
         measurementType: '',
         value: ''
-    });
-    const [isEditing, setIsEditing] = useState(false);
-    const [currentMeasurementId, setCurrentMeasurementId] = useState(null);
+    }); // State for measurement form
+    const [isEditing, setIsEditing] = useState(false); // State to determine if editing mode
+    const [currentMeasurementId, setCurrentMeasurementId] = useState(null); // State to store the current measurement ID being edited
 
     useEffect(() => {
-        fetchMeasurements();
+        fetchMeasurements(); // Fetch measurements when component mounts
     }, []);
 
     const fetchMeasurements = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token'); // Get token from localStorage
             const response = await fetch('https://localhost:7077/api/admin/measurements', {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` // Add token to request headers for authorization
                 }
             });
-            const data = await response.json();
-            setMeasurements(data);
+            const data = await response.json(); // Get measurements data from response
+            setMeasurements(data);Конечно, давайте добавим комментарии к вашему коду:
+
+### AdminMeasurements.js
+
+```javascript
+import React, { useEffect, useState } from 'react';
+import './AdminMeasurements.css';
+
+const AdminMeasurements = () => {
+    const [measurements, setMeasurements] = useState([]); // State to store measurements
+    const [measurementForm, setMeasurementForm] = useState({
+        deviceId: '',
+        measurementType: '',
+        value: ''
+    }); // State for measurement form
+    const [isEditing, setIsEditing] = useState(false); // State to determine if editing mode
+    const [currentMeasurementId, setCurrentMeasurementId] = useState(null); // State to store the current measurement ID being edited
+
+    useEffect(() => {
+        fetchMeasurements(); // Fetch measurements when component mounts
+    }, []);
+
+    const fetchMeasurements = async () => {
+        try {
+            const token = localStorage.getItem('token'); // Get token from localStorage
+            const response = await fetch('https://localhost:7077/api/admin/measurements', {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Add token to request headers for authorization
+                }
+            });
+            const data = await response.json(); // Get measurements data from response
+            setMeasurements(data); // Update state with fetched measurements data
         } catch (error) {
-            console.error('Ошибка при получении измерений:', error);
+            console.error('Error fetching measurements:', error); // Log error to the console
         }
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setMeasurementForm({ ...measurementForm, [name]: value });
+        setMeasurementForm({ ...measurementForm, [name]: value }); // Update form state on input change
     };
 
     const handleCreateMeasurement = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token'); // Get token from localStorage
             const response = await fetch('https://localhost:7077/api/admin/measurements', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` // Add token to request headers for authorization
                 },
-                body: JSON.stringify(measurementForm),
+                body: JSON.stringify(measurementForm), // Send form data to server to create new measurement
             });
             if (response.ok) {
-                fetchMeasurements();
-                setMeasurementForm({ deviceId: '', measurementType: '', value: '' });
+                fetchMeasurements(); // Refresh measurements list after successful creation
+                setMeasurementForm({ deviceId: '', measurementType: '', value: '' }); // Clear form after successful creation
             }
         } catch (error) {
-            console.error('Ошибка при создании измерения:', error);
+            console.error('Error creating measurement:', error); // Log error to the console
         }
     };
 
     const handleEditMeasurement = (item) => {
-        setIsEditing(true);
-        setCurrentMeasurementId(item.id);
+        setIsEditing(true); // Set edit mode
+        setCurrentMeasurementId(item.id); // Set current measurement ID being edited
         setMeasurementForm({
             deviceId: item.deviceId,
             measurementType: item.measurementType,
             value: item.value
-        });
+        }); // Fill form with data of the measurement being edited
     };
 
     const handleUpdateMeasurement = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token'); // Get token from localStorage
             const response = await fetch(`https://localhost:7077/api/admin/measurements/${currentMeasurementId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` // Add token to request headers for authorization
                 },
-                body: JSON.stringify(measurementForm),
+                body: JSON.stringify(measurementForm), // Send updated form data to server
             });
             if (response.ok) {
-                fetchMeasurements();
-                setMeasurementForm({ deviceId: '', measurementType: '', value: '' });
-                setIsEditing(false);
-                setCurrentMeasurementId(null);
+                fetchMeasurements(); // Refresh measurements list after successful update
+                setMeasurementForm({ deviceId: '', measurementType: '', value: '' }); // Clear form after successful update
+                setIsEditing(false); // Turn off edit mode
+                setCurrentMeasurementId(null); // Reset current measurement ID
             }
         } catch (error) {
-            console.error('Ошибка при обновлении измерения:', error);
+            console.error('Error updating measurement:', error); // Log error to the console
         }
     };
 
     const handleDeleteMeasurement = async (id) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token'); // Get token from localStorage
             await fetch(`https://localhost:7077/api/admin/measurements/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` // Add token to request headers for authorization
                 }
             });
-            fetchMeasurements();
+            fetchMeasurements(); // Refresh measurements list after successful deletion
         } catch (error) {
-            console.error('Ошибка при удалении измерения:', error);
+            console.error('Error deleting measurement:', error); // Log error to the console
         }
     };
 
@@ -110,9 +141,9 @@ const AdminMeasurements = () => {
                 <input type="text" name="measurementType" placeholder="Measurement Type" value={measurementForm.measurementType} onChange={handleInputChange} />
                 <input type="text" name="value" placeholder="Value" value={measurementForm.value} onChange={handleInputChange} />
                 {isEditing ? (
-                    <button onClick={handleUpdateMeasurement}>Update Measurement</button>
+                    <button onClick={handleUpdateMeasurement}>Update Measurement</button> // Button to update measurement
                 ) : (
-                    <button onClick={handleCreateMeasurement}>Create Measurement</button>
+                    <button onClick={handleCreateMeasurement}>Create Measurement</button> // Button to create new measurement
                 )}
             </div>
             <table className="measurement-table">
@@ -131,8 +162,8 @@ const AdminMeasurements = () => {
                             <td>{item.measurementType}</td>
                             <td>{item.value}</td>
                             <td>
-                                <button onClick={() => handleEditMeasurement(item)}>Edit</button>
-                                <button onClick={() => handleDeleteMeasurement(item.id)}>Delete</button>
+                                <button onClick={() => handleEditMeasurement(item)}>Edit</button> // Button to edit measurement
+                                <button onClick={() => handleDeleteMeasurement(item.id)}>Delete</button> // Button to delete measurement
                             </td>
                         </tr>
                     ))}
