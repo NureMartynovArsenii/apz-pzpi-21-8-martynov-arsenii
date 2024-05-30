@@ -1,34 +1,3 @@
-﻿import React, { useEffect, useState } from 'react';
-import './AdminMeasurements.css';
-
-const AdminMeasurements = () => {
-    const [measurements, setMeasurements] = useState([]); // State to store measurements
-    const [measurementForm, setMeasurementForm] = useState({
-        deviceId: '',
-        measurementType: '',
-        value: ''
-    }); // State for measurement form
-    const [isEditing, setIsEditing] = useState(false); // State to determine if editing mode
-    const [currentMeasurementId, setCurrentMeasurementId] = useState(null); // State to store the current measurement ID being edited
-
-    useEffect(() => {
-        fetchMeasurements(); // Fetch measurements when component mounts
-    }, []);
-
-    const fetchMeasurements = async () => {
-        try {
-            const token = localStorage.getItem('token'); // Get token from localStorage
-            const response = await fetch('https://localhost:7077/api/admin/measurements', {
-                headers: {
-                    'Authorization': `Bearer ${token}` // Add token to request headers for authorization
-                }
-            });
-            const data = await response.json(); // Get measurements data from response
-            setMeasurements(data);Конечно, давайте добавим комментарии к вашему коду:
-
-### AdminMeasurements.js
-
-```javascript
 import React, { useEffect, useState } from 'react';
 import './AdminMeasurements.css';
 
